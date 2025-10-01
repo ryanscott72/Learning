@@ -145,6 +145,265 @@ For production deployment, consider:
 7. **Custom Short Codes**: Allow users to create custom short codes
 8. **Analytics**: Add more detailed analytics (referrers, geographic data, etc.)
 
+## Deploying to Minikube
+
+### Step 1: Start Minikube
+```bash
+# Start Minikube with sufficient resources
+minikube start --cpus=2 --memory=4096
+
+# Enable required addons
+minikube addons enable ingress
+minikube addons enable metrics-server
+
+# Configure Docker to use Minikube's Docker daemon
+eval $(minikube docker-env)
+```
+
+### Step 2: Build Docker Images
+#### Backend Image
+```bash
+# From backend directory
+
+# Create Dockerfile (use the provided Dockerfile artifact)
+# Make sure server.js and package.json are in this directory
+
+# Build the image
+docker build -t url-shortener-backend:dev -f Dockerfile.dev .    
+
+# Verify the image
+docker images | grep url-shortener-backend
+```
+
+#### Frontend Image
+```bash
+# From frontend directory
+
+# Create Dockerfile and nginx.conf (use the provided artifacts)
+# Make sure your React app is in this directory
+
+# Update the API URL in your React component
+# Change API_BASE to use environment variable:
+# const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+
+# Build the image
+docker build -t url-shortener-frontend:dev -f Dockerfile.dev .
+
+# Verify the image
+docker images | grep url-shortener-frontend
+```
+
+### Step 3: Deploy to Kubernetes
+#### Deploy Backend
+```bash
+# Apply backend configuration
+kubectl apply -f backend-deployment-dev.yaml
+
+# Check deployment status
+kubectl get pods -l app=url-shortener-backend
+kubectl get svc url-shortener-backend-service
+
+# Check logs
+kubectl logs -l app=url-shortener-backend
+```
+
+#### Deploy Frontend
+```bash
+# Get Minikube IP for configuring the frontend
+minikube ip  # Usually 192.168.49.2
+
+# Update frontend-deployment.yaml with correct Minikube IP
+# Change REACT_APP_API_URL to: http://<MINIKUBE_IP>:30001
+
+# Apply frontend configuration
+kubectl apply -f frontend-deployment-dev.yaml
+
+# Check deployment status
+kubectl get pods -l app=url-shortener-frontend
+kubectl get svc url-shortener-frontend-service
+```
+
+### Step 4: Access the Application
+```bash
+# Get the Minikube IP
+minikube ip
+
+# Access the application
+# Frontend: http://<MINIKUBE_IP>:30000
+# Backend API: http://<MINIKUBE_IP>:30001
+
+# Or use Minikube service command
+minikube service url-shortener-frontend-service --url
+minikube service url-shortener-backend-service --url
+```
+
+### Step 5: Verify Deployment
+```bash
+# Check all resources
+kubectl get all
+
+# Check pods status
+kubectl get pods
+
+# Check services
+kubectl get svc
+
+# Check persistent volume claim
+kubectl get pvc
+
+# View pod logs
+kubectl logs -l app=url-shortener-backend
+kubectl logs -l app=url-shortener-frontend
+
+# Describe a pod for troubleshooting
+kubectl describe pod <pod-name>
+```
+
+## Accessing the Application
+Open your browser and navigate to:
+
+Frontend: http://<MINIKUBE_IP>:30000
+Backend API: http://<MINIKUBE_IP>:30001/api/health
+
+Replace <MINIKUBE_IP> with the IP address from minikube ip command.
+
+## Useful Commands
+### Scaling
+```bash
+# Scale frontend replicas
+kubectl scale deployment url-shortener-frontend --replicas=3
+
+# Scale backend replicas (be careful with SQLite)
+kubectl scale deployment url-shortener-backend --replicas=1
+```
+
+### Logs
+```bash
+# Follow logs
+kubectl logs -f -l app=url-shortener-backend
+kubectl logs -f -l app=url-shortener-frontend
+
+# View logs from specific pod
+kubectl logs <pod-name>
+```
+
+### Port Forwarding (Alternative Access)
+```bash
+# Forward backend port
+kubectl port-forward svc/url-shortener-backend-service 3001:3001
+
+# Forward frontend port
+kubectl port-forward svc/url-shortener-frontend-service 8080:80
+```
+
+### Debugging
+```bash
+# Execute commands in a pod
+kubectl exec -it <pod-name> -- /bin/sh
+
+# Check environment variables
+kubectl exec -it <pod-name> -- env
+
+# Check mounted volumes
+kubectl exec -it <pod-name> -- ls -la /app/data
+```
+
+## Updating the Application
+### Update Backend
+```bash
+# Rebuild image
+docker build -t url-shortener-backend:dev -f Dockerfile.dev .
+
+# Restart deployment
+kubectl rollout restart deployment url-shortener-backend
+
+# Check rollout status
+kubectl rollout status deployment url-shortener-backend
+```
+### Update Frontend
+```bash
+# Rebuild image
+docker build -t url-shortener-frontend:dev -f Dockerfile.dev .
+
+# Restart deployment
+kubectl rollout restart deployment url-shortener-frontend
+
+# Check rollout status
+kubectl rollout status deployment url-shortener-frontend
+```
+### Cleanup
+```bash
+# Delete all resources
+cd backend
+kubectl delete -f backend-deployment-dev.yaml
+cd ../frontend
+kubectl delete -f frontend-deployment-dev.yaml
+
+# Or delete by label
+kubectl delete all -l app=url-shortener-backend
+kubectl delete all -l app=url-shortener-frontend
+
+# Delete PVC
+kubectl delete pvc url-shortener-db-pvc
+
+# Stop Minikube
+minikube stop
+
+# Delete Minikube cluster
+minikube delete
+```
+
+## Production Considerations
+For production deployment, consider:
+1. Database: Replace SQLite with PostgreSQL or MySQL using a StatefulSet
+2. Ingress: Set up an Ingress controller for proper routing
+3. TLS/SSL: Add certificates for HTTPS
+4. Resource Limits: Adjust CPU and memory limits based on load
+5. Horizontal Pod Autoscaling: Configure HPA for automatic scaling
+6. Monitoring: Add Prometheus and Grafana for monitoring
+7. Logging: Implement centralized logging with ELK stack
+8. ConfigMaps/Secrets: Use secrets for sensitive data
+9. Health Checks: Fine-tune liveness and readiness probes
+10. Backup: Implement database backup strategies
+
+## Troubleshooting
+### Pods not starting
+```bash
+kubectl describe pod <pod-name>
+kubectl logs <pod-name>
+```
+
+### Image pull errors
+Ensure you're using Minikube's Docker daemon:
+```bash
+eval $(minikube docker-env)
+docker images  # Should show your images
+```
+
+### Service not accessible
+```bash
+# Check service endpoints
+kubectl get endpoints
+
+# Check if pods are running
+kubectl get pods
+
+# Verify NodePort
+kubectl get svc
+```
+
+### Database Issues
+```bash
+# Check PVC status
+kubectl get pvc
+
+# Check volume mounts
+kubectl describe pod <backend-pod-name>
+
+# Access pod and check database
+kubectl exec -it <backend-pod-name> -- ls -la /app/data
+```
+
 ## Contributing
 
 Feel free to submit issues and enhancement requests!

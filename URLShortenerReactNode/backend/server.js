@@ -5,14 +5,15 @@ const crypto = require('crypto');
 const path = require('path');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
 // Initialize SQLite database
-const db = new sqlite3.Database('urls.db');
+const dbPath = process.env.DB_PATH || '/app/data/urls.db';
+const db = new sqlite3.Database(dbPath);
 
 // Create table if it doesn't exist
 db.serialize(() => {
