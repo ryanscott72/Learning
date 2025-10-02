@@ -1,18 +1,24 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 const crypto = require('crypto');
 const path = require('path');
-
 const app = express();
-const PORT = process.env.PORT || 3001;
+
+const PORT = process.env.PORT;
+const REDIRECT_PORT = process.env.REDIRECT_PORT;
+const URL_FOR_SHORTENER = process.env.URL_FOR_SHORTENER;
+console.debug("PORT: ", process.env.PORT);
+console.debug("REDIRECT_PORT: ", process.env.REDIRECT_PORT);
+console.debug("URL_FOR_SHORTENER: ", process.env.URL_FOR_SHORTENER);
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
 // Initialize SQLite database
-const dbPath = process.env.DB_PATH || '/app/data/urls.db';
+const dbPath = process.env.DB_PATH;
 const db = new sqlite3.Database(dbPath);
 
 // Create table if it doesn't exist
@@ -58,17 +64,20 @@ app.post('/api/shorten', (req, res) => {
   // Check if URL already exists
   db.get('SELECT short_code FROM urls WHERE original_url = ?', [url], (err, row) => {
     if (err) {
+      console.error(err);
       return res.status(500).json({ error: 'Database error' });
     }
 
     if (row) {
+      console.debug("URL " + url + " already exists, returning existing short code");
       // URL already exists, return existing short code
       return res.json({
-        shortUrl: `http://localhost:${PORT}/${row.short_code}`,
+        shortUrl: `http://${URL_FOR_SHORTENER}:${REDIRECT_PORT}/${row.short_code}`,
         shortCode: row.short_code
       });
     }
 
+    console.debug("URL received: ", url);
     // Generate new short code
     const shortCode = generateShortCode();
 
@@ -81,8 +90,9 @@ app.post('/api/shorten', (req, res) => {
           return res.status(500).json({ error: 'Failed to create short URL' });
         }
 
+        console.debug("Returning shortened URL: ", `http://${URL_FOR_SHORTENER}:${REDIRECT_PORT}/${shortCode}`);
         res.json({
-          shortUrl: `http://localhost:${PORT}/${shortCode}`,
+          shortUrl: `http://${URL_FOR_SHORTENER}:${REDIRECT_PORT}/${shortCode}`,
           shortCode: shortCode
         });
       }
@@ -93,6 +103,7 @@ app.post('/api/shorten', (req, res) => {
 // Redirect to original URL
 app.get('/:shortCode', (req, res) => {
   const { shortCode } = req.params;
+  console.debug("Redirect shortcode " + shortCode + " to longcode");
 
   db.get(
     'SELECT original_url FROM urls WHERE short_code = ?',
@@ -109,6 +120,7 @@ app.get('/:shortCode', (req, res) => {
       // Increment click count
       db.run('UPDATE urls SET click_count = click_count + 1 WHERE short_code = ?', [shortCode]);
 
+      console.debug("Redirecting to URL: ", row.original_url);
       // Redirect to original URL
       res.redirect(row.original_url);
     }
@@ -118,6 +130,7 @@ app.get('/:shortCode', (req, res) => {
 // Get URL stats
 app.get('/api/stats/:shortCode', (req, res) => {
   const { shortCode } = req.params;
+  console.debug("Getting stats for shortcode: ", shortCode);
 
   db.get(
     'SELECT original_url, click_count, created_at FROM urls WHERE short_code = ?',
@@ -142,6 +155,7 @@ app.get('/api/stats/:shortCode', (req, res) => {
 
 // Get all URLs (for admin/debugging)
 app.get('/api/urls', (req, res) => {
+  console.debug("Getting all URLs");
   db.all(
     'SELECT short_code, original_url, click_count, created_at FROM urls ORDER BY created_at DESC',
     [],
@@ -157,13 +171,14 @@ app.get('/api/urls', (req, res) => {
 
 // Health check
 app.get('/api/health', (req, res) => {
+  console.debug('Health Check');
   res.json({ status: 'OK', message: 'URL Shortener API is running' });
 });
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-  console.log('Database: urls.db');
+  console.log(`Server running on http://0.0.0.0:${PORT}`);
+  console.log(`Database: ${dbPath}`);
 });
 
 // Graceful shutdown
