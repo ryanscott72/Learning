@@ -1,102 +1,123 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import styles from './login.module.css'
+import { useCallback, useState } from "react";
+import Link from "next/link";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Credentials, login } from "@/services/UserService";
 
 export default function LoginPage() {
-  const router = useRouter()
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [credentials, setCredentials] = useState<Credentials>({
+    username: "",
+    password: "",
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
-
-    try {
-      const credentials = btoa(`${username}:${password}`)
-      const response = await fetch('http://localhost:8080/api/profile', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Basic ${credentials}`,
-        },
+  const handleLogin = useCallback(() => {
+    login(credentials)
+      .then((response) => {
+        if (response.status === 401) {
+          // User unauthorized
+        }
       })
+      .catch((error) => {
+        // TODO
+        debugger;
+      });
+  }, [credentials]);
 
-      if (response.ok) {
-        // Store credentials or token as needed
-        localStorage.setItem('auth', credentials)
-        router.push('/dashboard')
-      } else {
-        setError('Invalid username or password')
-      }
-    } catch (err) {
-      setError('Failed to connect to server')
-    } finally {
-      setLoading(false)
-    }
-  }
+  const handleInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setCredentials((currentCredentials) => {
+        if (event.target.name === "username") {
+          return {
+            ...currentCredentials,
+            username: event.target.value,
+          };
+        } else if (event.target.name === "password") {
+          return {
+            ...currentCredentials,
+            password: event.target.value,
+          };
+        } else {
+          return currentCredentials;
+        }
+      });
+    },
+    [],
+  );
 
   return (
-    <div className={styles.container}>
-      <div className={styles.card}>
-        <h1 className={styles.title}>Welcome Back</h1>
-        <p className={styles.subtitle}>Please login to your account</p>
-        
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.inputGroup}>
-            <label htmlFor="username" className={styles.label}>
-              Username
-            </label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className={styles.input}
-              placeholder="Enter your username"
-              required
-            />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="password" className={styles.label}>
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className={styles.input}
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-
-          {error && <div className={styles.error}>{error}</div>}
-
-          <button
-            type="submit"
-            className={styles.button}
-            disabled={loading}
+    <Box sx={{ height: "100vh", width: "100vw", alignContent: "center" }}>
+      <Card sx={{ margin: "auto", width: "50vw" }}>
+        <CardContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h4">Welcome Back</Typography>
+          <Typography variant="body1" sx={{ marginBottom: "20px" }}>
+            Please login to your account
+          </Typography>
+          <TextField
+            sx={{ marginBottom: "20px", width: "75%" }}
+            label="Username"
+            name="username"
+            placeholder="Enter your username"
+            onChange={handleInputChange}
+          />
+          <TextField
+            sx={{ marginBottom: "20px", width: "75%" }}
+            type={showPassword ? "text" : "password"}
+            label="Password"
+            name="password"
+            placeholder="Enter your password"
+            onChange={handleInputChange}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() =>
+                        setShowPassword((prevShowPassword) => !prevShowPassword)
+                      }
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+          <Button
+            sx={{ marginBottom: "20px", width: "50%" }}
+            variant="contained"
+            onClick={handleLogin}
           >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-
-        <div className={styles.footer}>
-          <p className={styles.footerText}>
-            Don't have an account?{' '}
-            <Link href="/register" className={styles.link}>
-              Register here
-            </Link>
-          </p>
-        </div>
-      </div>
-    </div>
-  )
+            Login
+          </Button>
+          <Box>
+            <Typography variant="body1">
+              {"Don't have an account?  "}
+              <Link href="/register">Register here</Link>
+            </Typography>
+          </Box>
+        </CardContent>
+      </Card>
+    </Box>
+  );
 }
