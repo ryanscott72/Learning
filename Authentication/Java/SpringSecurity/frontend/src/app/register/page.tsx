@@ -1,173 +1,215 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import styles from "./register.module.css";
+
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { RegisterInput } from "@/gql/graphql";
+import { register } from "@/services/AuthenticationService";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
+  const [registration, setRegistration] = useState<RegisterInput>({
     username: "",
     password: "",
-    confirmPassword: "",
     firstName: "",
     lastName: "",
   });
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [passwordsDontMatch, setPasswordsDontMatch] = useState<boolean>(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const handleRegister = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      setErrorMessage(null);
+      event.preventDefault();
+      setIsLoading(true);
+      register(registration)
+        .then(() => router.push("/login"))
+        .catch(setErrorMessage)
+        .finally(() => setIsLoading(false));
+    },
+    [router, registration],
+  );
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const response = await fetch("http://localhost:8080/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: formData.username,
-          password: formData.password,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-        }),
+  const handleInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setRegistration((currentRegistration) => {
+        return {
+          ...currentRegistration,
+          [event.target.name]: event.target.value,
+        };
       });
+    },
+    [],
+  );
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        router.push("/login?registered=true");
+  const handleCheckPasswords = useCallback(
+    (event: React.FocusEvent<HTMLInputElement>) => {
+      if (event.target.value !== registration.password) {
+        setPasswordsDontMatch(true);
       } else {
-        setError(data.message || "Registration failed");
+        setPasswordsDontMatch(false);
       }
-    } catch (err) {
-      setError("Failed to connect to server");
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [registration.password],
+  );
 
   return (
-    <div className={styles.container}>
-      <div className={styles.card}>
-        <h1 className={styles.title}>Create Account</h1>
-        <p className={styles.subtitle}>Join us today</p>
-
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.row}>
-            <div className={styles.inputGroup}>
-              <label htmlFor="firstName" className={styles.label}>
-                First Name
-              </label>
-              <input
-                id="firstName"
-                name="firstName"
-                type="text"
-                value={formData.firstName}
-                onChange={handleChange}
-                className={styles.input}
-                placeholder="John"
-                required
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <label htmlFor="lastName" className={styles.label}>
-                Last Name
-              </label>
-              <input
-                id="lastName"
-                name="lastName"
-                type="text"
-                value={formData.lastName}
-                onChange={handleChange}
-                className={styles.input}
-                placeholder="Doe"
-                required
-              />
-            </div>
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="username" className={styles.label}>
-              Username
-            </label>
-            <input
-              id="username"
+    <Box sx={{ height: "100vh", width: "100vw", alignContent: "center" }}>
+      <Card sx={{ margin: "auto", width: "50vw" }}>
+        <CardContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h4">Create Account</Typography>
+          <Typography variant="body1">Join us today</Typography>
+          {errorMessage !== null && errorMessage !== undefined && (
+            <Alert sx={{ marginBottom: "16px" }} severity="error">
+              {errorMessage}
+            </Alert>
+          )}
+          <form
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              width: "75%",
+              alignItems: "center",
+            }}
+            onSubmit={handleRegister}
+          >
+            <TextField
+              required
+              sx={{ marginBottom: "20px", width: "75%" }}
+              label="Username"
               name="username"
-              type="text"
-              value={formData.username}
-              onChange={handleChange}
-              className={styles.input}
-              placeholder="Choose a username"
-              required
+              placeholder="Enter your username"
+              onChange={handleInputChange}
+              value={registration.username}
             />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="password" className={styles.label}>
-              Password
-            </label>
-            <input
-              id="password"
+            <TextField
+              required
+              sx={{ marginBottom: "20px", width: "75%" }}
+              type={showPassword ? "text" : "password"}
+              label="Password"
               name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              className={styles.input}
-              placeholder="Create a password"
-              required
+              placeholder="Enter your password"
+              onChange={handleInputChange}
+              value={registration.password}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() =>
+                          setShowPassword(
+                            (prevShowPassword) => !prevShowPassword,
+                          )
+                        }
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="confirmPassword" className={styles.label}>
-              Confirm Password
-            </label>
-            <input
-              id="confirmPassword"
+            <TextField
+              required
+              sx={{ marginBottom: "20px", width: "75%" }}
+              type={showConfirmPassword ? "text" : "password"}
+              label="Confirm Password"
               name="confirmPassword"
-              type="password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className={styles.input}
               placeholder="Confirm your password"
-              required
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setConfirmPassword(e.target.value)
+              }
+              value={confirmPassword}
+              onBlur={handleCheckPasswords}
+              error={passwordsDontMatch}
+              helperText={
+                passwordsDontMatch && "The passwords you entered do not match."
+              }
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() =>
+                          setShowConfirmPassword(
+                            (prevShowConfirmPassword) =>
+                              !prevShowConfirmPassword,
+                          )
+                        }
+                        edge="end"
+                      >
+                        {showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
-          </div>
-
-          {error && <div className={styles.error}>{error}</div>}
-
-          <button type="submit" className={styles.button} disabled={loading}>
-            {loading ? "Creating Account..." : "Register"}
-          </button>
-        </form>
-
-        <div className={styles.footer}>
-          <p className={styles.footerText}>
-            Already have an account?{" "}
-            <Link href="/login" className={styles.link}>
-              Login here
-            </Link>
-          </p>
-        </div>
-      </div>
-    </div>
+            <TextField
+              required
+              sx={{ marginBottom: "20px", width: "75%" }}
+              label="First Name"
+              name="firstName"
+              placeholder="Enter your first name"
+              onChange={handleInputChange}
+              value={registration.firstName}
+            />
+            <TextField
+              required
+              sx={{ marginBottom: "20px", width: "75%" }}
+              label="Last Name"
+              name="lastName"
+              placeholder="Enter your last name"
+              onChange={handleInputChange}
+              value={registration.lastName}
+            />
+            <Button
+              sx={{ marginBottom: "20px", width: "50%" }}
+              variant="contained"
+              loading={isLoading}
+              disabled={
+                registration.username === "" ||
+                registration.password === "" ||
+                registration.firstName === "" ||
+                registration.lastName === "" ||
+                registration.password !== confirmPassword
+              }
+              type="submit"
+            >
+              Login
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </Box>
   );
 }

@@ -1,0 +1,40 @@
+type Query {
+    profile: UserProfile
+}
+
+type Mutation {
+    register(input: RegisterInput!): RegisterResponse!
+    login(input: LoginInput!): LoginResponse!
+    logout: String!
+}
+
+input RegisterInput {
+    username: String!
+    password: String!
+    firstName: String!
+    lastName: String!
+}
+
+input LoginInput {
+    username: String!
+    password: String!
+}
+
+type RegisterResponse {
+    success: Boolean!
+    message: String!
+    userId: ID
+}
+
+type LoginResponse {
+    success: Boolean!
+    message: String!
+    username: String
+}
+
+type UserProfile {
+    username: String!
+    firstName: String!
+    lastName: String!
+    role: String!
+}

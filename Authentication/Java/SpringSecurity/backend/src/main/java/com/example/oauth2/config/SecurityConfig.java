@@ -1,5 +1,6 @@
 package com.example.oauth2.config;
 
+import com.example.oauth2.filter.JwtAuthenticationFilter;
 import com.example.oauth2.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
@@ -23,6 +25,7 @@ public class SecurityConfig {
 
   private final CustomUserDetailsService userDetailsService;
   private final CorsConfigurationSource corsConfigurationSource;
+  private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -31,25 +34,25 @@ public class SecurityConfig {
   }
 
   @Bean
-  public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-    var builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+  public AuthenticationManager authenticationManager(final HttpSecurity http) throws Exception {
+    final var builder = http.getSharedObject(AuthenticationManagerBuilder.class);
     builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     return builder.build();
   }
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
     http.cors(cors -> cors.configurationSource(corsConfigurationSource))
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers("/api/register", "/h2-console/**")
+                auth.requestMatchers("/graphql", "/graphiql", "/h2-console/**")
                     .permitAll()
                     .anyRequest()
                     .authenticated())
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .httpBasic(basic -> {})
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
 
     return http.build();

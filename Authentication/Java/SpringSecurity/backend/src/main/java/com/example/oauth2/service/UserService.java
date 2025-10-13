@@ -12,18 +12,19 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
 
   @Transactional
-  public RegisterResponse registerUser(RegisterRequest request) {
+  public RegisterResponse registerUser(final RegisterRequest request) {
     // Check if username already exists
     if (userRepository.existsByUsername(request.getUsername())) {
-      return new RegisterResponse(false, "Username already exists", null);
+      return RegisterResponse.REGISTER_RESPONSE_USERNAME_ALREADY_EXISTS;
     }
 
     // Create new User POJO
-    User user =
+    final User user =
         User.builder()
             .username(request.getUsername())
             .password(passwordEncoder.encode(request.getPassword()))
@@ -34,8 +35,8 @@ public class UserService {
             .build();
 
     // Save to database
-    User savedUser = userRepository.save(user);
+    final User savedUser = userRepository.save(user);
 
-    return new RegisterResponse(true, "User registered successfully", savedUser.getId());
+    return RegisterResponse.REGISTER_RESPONSE_SUCCESS_TEMPLATE.userId(savedUser.getId()).build();
   }
 }

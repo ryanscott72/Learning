@@ -30,8 +30,10 @@ public class User {
   private String lastName;
 
   @Column(nullable = false)
+  @Builder.Default
   private String role = "USER";
 
   @Column(nullable = false)
+  @Builder.Default
   private boolean enabled = true;
 }

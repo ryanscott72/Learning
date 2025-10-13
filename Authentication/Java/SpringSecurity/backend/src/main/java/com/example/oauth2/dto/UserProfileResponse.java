@@ -1,11 +1,13 @@
 package com.example.oauth2.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class RegisterRequest {
+@AllArgsConstructor
+public class UserProfileResponse {
   private String username;
-  private String password;
   private String firstName;
   private String lastName;
+  private String role;
 }
