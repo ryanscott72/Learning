@@ -36,13 +36,7 @@ public class GraphQLController {
 
   @MutationMapping
   public RegisterResponse register(@Argument final RegisterInput input) {
-    final var request = new RegisterRequest();
-    request.setUsername(input.username());
-    request.setPassword(input.password());
-    request.setFirstName(input.firstName());
-    request.setLastName(input.lastName());
-
-    return userService.registerUser(request);
+    return userService.registerUser(input);
   }
 
   @MutationMapping

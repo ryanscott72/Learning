@@ -1,9 +1,11 @@
 import { graphql } from "@/gql";
 import {
   LoginInput,
+  LoginResponse,
   Mutation,
   Query,
   RegisterInput,
+  RegisterResponse,
   UserProfile,
 } from "@/gql/graphql";
 import { graphqlClient } from "@/lib/graphql-client";
@@ -47,40 +49,37 @@ const LOGOUT_MUTATION = graphql(`
 
 export async function login(input: LoginInput): Promise<string> {
   try {
-    const data = await graphqlClient.request<Pick<Mutation, "login">>(
-      LOGIN_MUTATION,
-      { input },
-    );
+    const data = await graphqlClient.request<LoginResponse>(LOGIN_MUTATION, {
+      input,
+    });
 
-    if (data.login.success) {
+    if (data.success) {
       // Store username and return it
-      return Promise.resolve(data.login.username || "");
+      return Promise.resolve(data.username || "");
     } else {
-      return Promise.reject(data.login.message);
+      return Promise.reject(data.message);
     }
-  } catch (err: any) {
-    const errorMsg =
-      err.response?.errors?.[0]?.message || "Failed to connect to server";
-    return Promise.reject(errorMsg);
+  } catch (err: unknown) {
+    return Promise.reject(getErrorMessageFromUnknownError(err));
   }
 }
 
-export async function register(input: RegisterInput): Promise<void> {
+export async function register(
+  input: RegisterInput,
+): Promise<RegisterResponse | string> {
   try {
-    const data = await graphqlClient.request<Pick<Mutation, "register">>(
+    const data = await graphqlClient.request<RegisterResponse>(
       REGISTER_MUTATION,
       { input },
     );
 
-    if (data.register.success) {
-      return Promise.resolve();
+    if (data.success) {
+      return Promise.resolve(data);
     } else {
-      return Promise.reject(data.register.message);
+      return Promise.reject(data.message);
     }
-  } catch (err: any) {
-    const errorMsg =
-      err.response?.errors?.[0]?.message || "Failed to connect to server";
-    return Promise.reject(errorMsg);
+  } catch (err: unknown) {
+    return Promise.reject(getErrorMessageFromUnknownError(err));
   }
 }
 
@@ -94,19 +93,23 @@ export async function getProfile(): Promise<UserProfile> {
     } else {
       return Promise.reject("Profile not found");
     }
-  } catch (err: any) {
-    const errorMsg =
-      err.response?.errors?.[0]?.message || "Failed to fetch profile";
-    return Promise.reject(errorMsg);
+  } catch (err: unknown) {
+    return Promise.reject(getErrorMessageFromUnknownError(err));
   }
 }
 
-export async function logout(): Promise<void> {
+export async function logout(): Promise<void | string> {
   try {
     await graphqlClient.request<Pick<Mutation, "logout">>(LOGOUT_MUTATION);
     return Promise.resolve();
-  } catch (err: any) {
-    const errorMsg = err.response?.errors?.[0]?.message || "Failed to logout";
-    return Promise.reject(errorMsg);
+  } catch (err: unknown) {
+    return getErrorMessageFromUnknownError(err);
   }
+}
+
+function getErrorMessageFromUnknownError(err: unknown): string {
+  if (err instanceof TypeError) {
+    return "Failed to connect to server";
+  }
+  return "TODO";
 }
