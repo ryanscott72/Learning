@@ -1,11 +1,11 @@
 import { graphql } from "@/gql";
 import {
   LoginInput,
-  LoginResponse,
+  LoginMutation,
   Mutation,
   Query,
   RegisterInput,
-  RegisterResponse,
+  RegisterMutation,
   UserProfile,
 } from "@/gql/graphql";
 import { graphqlClient } from "@/lib/graphql-client";
@@ -49,37 +49,35 @@ const LOGOUT_MUTATION = graphql(`
 
 export async function login(input: LoginInput): Promise<string> {
   try {
-    const data = await graphqlClient.request<LoginResponse>(LOGIN_MUTATION, {
+    const data = await graphqlClient.request<LoginMutation>(LOGIN_MUTATION, {
       input,
     });
 
-    if (data.success) {
+    if (data.login.success && data.login.username) {
       // Store username and return it
-      return Promise.resolve(data.username || "");
+      return data.login.username;
     } else {
-      return Promise.reject(data.message);
+      throw new Error(data.login.message);
     }
   } catch (err: unknown) {
-    return Promise.reject(getErrorMessageFromUnknownError(err));
+    throw new Error(getErrorMessageFromUnknownError(err));
   }
 }
 
-export async function register(
-  input: RegisterInput,
-): Promise<RegisterResponse | string> {
+export async function register(input: RegisterInput): Promise<void | string> {
   try {
-    const data = await graphqlClient.request<RegisterResponse>(
+    const data = await graphqlClient.request<RegisterMutation>(
       REGISTER_MUTATION,
       { input },
     );
 
-    if (data.success) {
-      return Promise.resolve(data);
+    if (data.register.success) {
+      return;
     } else {
-      return Promise.reject(data.message);
+      throw new Error(data.register.message);
     }
   } catch (err: unknown) {
-    return Promise.reject(getErrorMessageFromUnknownError(err));
+    throw new Error(getErrorMessageFromUnknownError(err));
   }
 }
 
@@ -89,21 +87,21 @@ export async function getProfile(): Promise<UserProfile> {
       await graphqlClient.request<Pick<Query, "profile">>(PROFILE_QUERY);
 
     if (data.profile) {
-      return Promise.resolve(data.profile);
+      return data.profile;
     } else {
-      return Promise.reject("Profile not found");
+      throw new Error("Profile not found");
     }
   } catch (err: unknown) {
-    return Promise.reject(getErrorMessageFromUnknownError(err));
+    throw new Error(getErrorMessageFromUnknownError(err));
   }
 }
 
 export async function logout(): Promise<void | string> {
   try {
     await graphqlClient.request<Pick<Mutation, "logout">>(LOGOUT_MUTATION);
-    return Promise.resolve();
+    return;
   } catch (err: unknown) {
-    return getErrorMessageFromUnknownError(err);
+    throw new Error(getErrorMessageFromUnknownError(err));
   }
 }
 
