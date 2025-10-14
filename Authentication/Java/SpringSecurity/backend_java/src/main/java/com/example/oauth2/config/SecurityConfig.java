@@ -46,7 +46,7 @@ public class SecurityConfig {
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers("/graphql", "/graphiql", "/h2-console/**")
+                auth.requestMatchers("/graphql", "/graphiql")
                     .permitAll()
                     .anyRequest()
                     .authenticated())

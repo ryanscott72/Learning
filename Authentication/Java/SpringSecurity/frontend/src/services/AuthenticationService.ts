@@ -56,9 +56,8 @@ export async function login(input: LoginInput): Promise<string> {
     if (data.login.success && data.login.username) {
       // Store username and return it
       return data.login.username;
-    } else {
-      throw new Error(data.login.message);
     }
+    throw new Error(data.login.message);
   } catch (err: unknown) {
     throw new Error(getErrorMessageFromUnknownError(err));
   }
@@ -73,9 +72,8 @@ export async function register(input: RegisterInput): Promise<void | string> {
 
     if (data.register.success) {
       return;
-    } else {
-      throw new Error(data.register.message);
     }
+    throw new Error(data.register.message);
   } catch (err: unknown) {
     throw new Error(getErrorMessageFromUnknownError(err));
   }
@@ -88,9 +86,8 @@ export async function getProfile(): Promise<UserProfile> {
 
     if (data.profile) {
       return data.profile;
-    } else {
-      throw new Error("Profile not found");
     }
+    throw new Error("Profile not found");
   } catch (err: unknown) {
     throw new Error(getErrorMessageFromUnknownError(err));
   }
@@ -108,6 +105,8 @@ export async function logout(): Promise<void | string> {
 function getErrorMessageFromUnknownError(err: unknown): string {
   if (err instanceof TypeError) {
     return "Failed to connect to server";
+  } else if (err instanceof Error) {
+    return err.message;
   }
-  return "TODO";
+  return "An unknown error occurred";
 }

@@ -35,8 +35,11 @@ export default function LoginPage() {
       event.preventDefault();
       setIsLoading(true);
       login(credentials)
-        .then((username) => router.push("/dashboard"))
-        .catch(setErrorMessage)
+        .then((username) => {
+          // TODO Store username in Global State?
+          router.push("/dashboard");
+        })
+        .catch((err: Error) => setErrorMessage(err.message))
         .finally(() => setIsLoading(false));
     },
     [router, credentials],

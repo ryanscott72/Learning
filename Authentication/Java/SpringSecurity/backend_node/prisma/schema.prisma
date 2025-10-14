@@ -1,0 +1,93 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              BigInt           @id @default(autoincrement())
+  username        String           @unique
+  password        String
+  firstName       String
+  lastName        String
+  role            String           @default("USER")
+  enabled         Boolean          @default(true)
+  userPreferences UserPreferences?
+  journalEntries  JournalEntry[]
+
+  @@map("users")
+}
+
+model UserPreferences {
+  id              BigInt          @id @default(autoincrement())
+  userId          BigInt          @unique @map("user_id")
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  temperatureUnit TemperatureUnit @default(CELSIUS)
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+
+  @@map("user_preferences")
+}
+
+model JournalEntry {
+  id                   BigInt       @id @default(autoincrement())
+  userId               BigInt       @map("user_id")
+  user                 User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entryDate            DateTime     @map("entry_date") @db.Date
+  mood                 Mood
+  weatherCondition     WeatherCondition? @map("weather_condition")
+  temperatureCelsius   Float?       @map("temperature_celsius")
+  humidity             Int?
+  medications          Medication[]
+  season               Season?
+  notes                String?      @db.Text
+  createdAt            DateTime     @default(now()) @map("created_at")
+  updatedAt            DateTime     @updatedAt @map("updated_at")
+
+  @@unique([userId, entryDate])
+  @@map("journal_entries")
+}
+
+model Medication {
+  id             BigInt       @id @default(autoincrement())
+  journalEntryId BigInt       @map("journal_entry_id")
+  journalEntry   JournalEntry @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  name           String
+  dosage         String
+  timeTaken      DateTime     @map("time_taken")
+
+  @@map("medications")
+}
+
+enum Mood {
+  POOR
+  FAIR
+  NEUTRAL
+  GOOD
+  GREAT
+}
+
+enum Season {
+  SPRING
+  SUMMER
+  FALL
+  WINTER
+}
+
+enum TemperatureUnit {
+  CELSIUS
+  FAHRENHEIT
+}
+
+enum WeatherCondition {
+  SUNNY
+  RAINY
+  SNOW
+  CLOUDY
+  OVERCAST
+  STORM
+}
