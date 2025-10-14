@@ -109,6 +109,3 @@ Thumbs.db
 # Debug files
 .vscode-test/
 .eslintcache
-
-# Optional npm lock file (uncomment if not using npm)
-# package-lock.json
