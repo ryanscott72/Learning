@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ae070736-7ce9-425a-a04a-e06f759e1f80" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/Application.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/config/CorsConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/config/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/dto/LoginInput.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/dto/LoginResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/dto/RegisterInput.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/dto/RegisterResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/dto/UserProfileResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/entity/JournalEntry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/entity/Medication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/entity/Mood.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/entity/Season.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/entity/TemperatureUnit.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/entity/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/entity/UserPreferences.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/entity/WeatherCondition.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/entity/WeatherSnapshot.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/graphql/GraphQLController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/repository/UserPreferencesRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/service/AuthService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/service/CustomUserDetailsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../authentication-service/src/main/java/learning/journalapp/service/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dto/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/exception/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logging/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logging/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logging/src/main/java/learning/journalapp/platform/logging/CorrelationIdHolder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logging/src/main/java/learning/journalapp/platform/logging/StructuredLogger.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logging/src/main/java/learning/journalapp/platform/logging/config/LoggingAutoConfiguration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logging/src/main/java/learning/journalapp/platform/logging/filter/CorrelationIdFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logging/src/main/java/learning/journalapp/platform/logging/interceptor/RestTemplateCorrelationIdInterceptor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logging/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logging/src/main/resources/logback-spring.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/outbox/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/security/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/security/src/main/java/learning/journalapp/platform/security/config/BaseSecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/security/src/main/java/learning/journalapp/platform/security/config/SecurityAutoConfiguration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/security/src/main/java/learning/journalapp/platform/security/filter/JwtAuthenticationFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/security/src/main/java/learning/journalapp/platform/security/util/JwtTokenProvider.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/security/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/util/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/HELP.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/Application.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/config/CorsConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/config/SecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/dto/LoginInput.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/dto/LoginResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/dto/RegisterInput.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/dto/RegisterResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/dto/UserProfileResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/filter/JwtAuthenticationFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/graphql/GraphQLController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/model/JournalEntry.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/model/Medication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/model/Mood.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/model/Season.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/model/TemperatureUnit.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/model/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/model/UserPreferences.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/model/WeatherCondition.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/model/WeatherSnapshot.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/repository/UserPreferencesRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/repository/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/service/CustomUserDetailsService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/service/UserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/java/com/example/oauth2/util/JwtUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/resources/application-prod.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/resources/application-test.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/resources/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_java/src/main/resources/graphql/schema.graphqls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_node/.eslintignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_node/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_node/.prettierignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_node/.prettierrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_node/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_node/eslint.config.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_node/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_node/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_node/prisma/schema.prisma" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_node/src/graphql/resolvers.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_node/src/graphql/schema.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_node/src/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_node/src/middleware/authMiddleware.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_node/src/services/authService.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/backend_node/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/.prettierignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/.prettierrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/.vscode/settings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/codegen.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/eslint.config.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/next.config.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/public/file.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/public/globe.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/public/next.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/public/vercel.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/public/window.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/src/app/dashboard/dashboard.module.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/src/app/dashboard/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/src/app/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/src/app/globals.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/src/app/layout.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/src/app/login/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/src/app/page.module.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/src/app/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/src/app/register/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/src/gql/fragment-masking.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/src/gql/gql.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/src/gql/graphql.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/src/gql/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/src/lib/graphql-client.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/src/services/AuthenticationService.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../oauth2_fullstack_journalapp/frontend/tsconfig.json" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ryanscott72&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:ryanscott72/Learning.git&quot;,
+    &quot;accountId&quot;: &quot;6fd03e15-f5cf-4f09-bbb6-c129d12563e6&quot;
+  }
+}</component>
+  <component name="OptimizeOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="34CUAoplSfzjbNuvduGPqaC1TlP" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.logging [clean].executor": "Run",
+    "Maven.logging [install].executor": "Run",
+    "Maven.platform [clean].executor": "Run",
+    "Maven.platform-parent [clean].executor": "Run",
+    "Maven.platform-parent [install].executor": "Run",
+    "Maven.security [clean].executor": "Run",
+    "Maven.security [install].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "F:/git/Learning/JournalApp/backend_java_microservices/platform",
+    "onboarding.tips.debug.path": "F:/git/Learning/oauth2_fullstack_journalapp/backend_java_commons/src/main/java/org/example/Main.java",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "rearrange.code.on.save": "true",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\git\Learning\JournalApp\backend_java_microservices\platform\logging\src\main\resources\META-INF\spring" />
+      <recent name="F:\git\Learning\JournalApp\backend_java_microservices\platform\logging\src\main\resources" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="outbox-commons" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="commons" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ae070736-7ce9-425a-a04a-e06f759e1f80" name="Changes" comment="" />
+      <created>1758397161162</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1758397161162</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/../.." />
+    </ignored-roots>
+  </component>
+</project>
